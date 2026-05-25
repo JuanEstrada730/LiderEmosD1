@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>LiderEmos D1</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #D32F2F;
+    --red-light: #FF5252;
+    --red-dark: #B71C1C;
+    --blue: #1565C0;
+    --blue-light: #42A5F5;
+    --green: #2E7D32;
+    --green-light: #66BB6A;
+    --yellow: #F9A825;
+    --yellow-light: #FFD54F;
+    --gray: #ECEFF1;
+    --gray-dark: #546E7A;
+    --text: #1A1A2E;
+    --white: #FFFFFF;
+    --bg: #F5F7FA;
+    --card: #FFFFFF;
+    --shadow: 0 4px 20px rgba(0,0,0,0.10);
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.07);
+    --radius: 18px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Nunito Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    max-width: 430px;
+    margin: 0 auto;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  .app-header {
+    background: var(--red);
+    color: white;
+    padding: 52px 20px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(211,47,47,0.3);
+  }
+  .app-header .logo-text {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 22px;
+    letter-spacing: -0.5px;
+  }
+  .app-header .logo-text span { color: #FFD54F; }
+  .app-header .subtitle { font-size: 11px; opacity: 0.85; margin-top: 1px; }
+  .header-icon {
+    width: 42px; height: 42px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+
+  /* MAIN CONTENT */
+  .main { padding: 16px 16px 90px; }
+
+  /* SCREENS */
+  .screen { display: none; animation: fadeIn 0.3s ease; }
+  .screen.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* BOTTOM NAV */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 100%; max-width: 430px;
+    background: white;
+    display: flex;
+    border-top: 1px solid #E0E0E0;
+    z-index: 100;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+  }
+  .nav-item {
+    flex: 1; padding: 10px 4px 12px;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 4px; cursor: pointer; transition: all 0.2s;
+    border: none; background: none; color: #9E9E9E;
+    font-family: 'Nunito', sans-serif; font-size: 10px; font-weight: 700;
+  }
+  .nav-item.active { color: var(--red); }
+  .nav-item .nav-icon { font-size: 22px; }
+  .nav-item.active .nav-icon { filter: drop-shadow(0 2px 4px rgba(211,47,47,0.3)); }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-sm);
+  }
+  .card-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800; font-size: 15px;
+    color: var(--text); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  /* WELCOME SCREEN */
+  .welcome-hero {
+    background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    color: white;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .welcome-hero::before {
+    content: '❤️';
+    position: absolute; right: -10px; top: -10px;
+    font-size: 80px; opacity: 0.15;
+  }
+  .welcome-name { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 22px; }
+  .welcome-role { font-size: 13px; opacity: 0.85; margin-top: 2px; margin-bottom: 16px; }
+  .welcome-stats { display: flex; gap: 12px; }
+  .stat-pill {
+    background: rgba(255,255,255,0.18);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800; font-size: 13px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .qa-btn {
+    background: white;
+    border-radius: var(--radius-sm);
+    padding: 16px 14px;
+    display: flex; flex-direction: column;
+    align-items: flex-start; gap: 6px;
+    cursor: pointer; border: none;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s; text-align: left;
+    width: 100%;
+  }
+  .qa-btn:active { transform: scale(0.97); }
+  .qa-btn .qa-icon { font-size: 26px; }
+  .qa-btn .qa-label { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px; color: var(--text); }
+  .qa-btn .qa-sub { font-size: 11px; color: var(--gray-dark); }
+  .qa-btn.red .qa-icon-bg { background: #FFEBEE; border-radius: 8px; padding: 6px; }
+  .qa-btn.blue .qa-icon-bg { background: #E3F2FD; border-radius: 8px; padding: 6px; }
+  .qa-btn.green .qa-icon-bg { background: #E8F5E9; border-radius: 8px; padding: 6px; }
+  .qa-btn.yellow .qa-icon-bg { background: #FFFDE7; border-radius: 8px; padding: 6px; }
+
+  .progress-card { }
+  .prog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .prog-score { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 32px; color: var(--red); }
+  .prog-score span { font-size: 16px; color: var(--gray-dark); font-weight: 600; }
+  .prog-badge { background: #E8F5E9; color: var(--green); border-radius: 20px; padding: 4px 12px; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 12px; }
+  .mini-bar { margin-bottom: 10px; }
+  .mini-bar-label { display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px; color: var(--gray-dark); font-weight: 600; }
+  .mini-bar-track { background: var(--gray); border-radius: 20px; height: 7px; overflow: hidden; }
+  .mini-bar-fill { height: 100%; border-radius: 20px; transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
+
+  /* EVALUACION SCREEN */
+  .eval-progress { display: flex; gap: 4px; margin-bottom: 18px; }
+  .eval-dot { flex: 1; height: 4px; background: var(--gray); border-radius: 2px; transition: background 0.3s; }
+  .eval-dot.done { background: var(--red); }
+  .eval-dot.active { background: var(--red-light); }
+
+  .question-card {
+    background: white; border-radius: var(--radius);
+    padding: 20px; box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+  .q-category {
+    display: inline-block;
+    background: #FFEBEE; color: var(--red);
+    border-radius: 6px; padding: 3px 10px;
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 11px;
+    margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .q-text { font-size: 15px; line-height: 1.5; margin-bottom: 18px; font-weight: 600; color: var(--text); }
+  .likert { display: flex; gap: 8px; justify-content: space-between; }
+  .likert-btn {
+    flex: 1; aspect-ratio: 1;
+    border: 2.5px solid var(--gray);
+    border-radius: 12px; background: white;
+    font-family: 'Nunito', sans-serif; font-weight: 800;
+    font-size: 18px; cursor: pointer;
+    transition: all 0.15s; display: flex;
+    align-items: center; justify-content: center;
+    color: var(--gray-dark);
+  }
+  .likert-btn:active { transform: scale(0.9); }
+  .likert-btn.selected { background: var(--red); border-color: var(--red); color: white; box-shadow: 0 4px 12px rgba(211,47,47,0.35); }
+  .likert-labels { display: flex; justify-content: space-between; margin-top: 6px; }
+  .likert-label { font-size: 10px; color: var(--gray-dark); }
+
+  .btn-primary {
+    width: 100%; padding: 16px;
+    background: var(--red);
+    color: white; border: none; border-radius: var(--radius-sm);
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 16px;
+    cursor: pointer; transition: all 0.2s;
+    box-shadow: 0 4px 16px rgba(211,47,47,0.35);
+  }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-secondary {
+    width: 100%; padding: 14px;
+    background: white; color: var(--red);
+    border: 2px solid var(--red); border-radius: var(--radius-sm);
+    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 15px;
+    cursor: pointer; margin-top: 10px;
+  }
+
+  /* DIAGNOSTICO SCREEN */
+  .score-hero {
+    background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    color: white;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+  .score-hero .month { font-size: 12px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  .score-big { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 52px; line-height: 1; }
+  .score-big span { font-size: 22px; opacity: 0.6; font-weight: 600; }
+  .score-delta { display: inline-flex; align-items: center; gap: 4px; background: rgba(102,187,106,0.2); color: #66BB6A; border-radius: 20px; padding: 4px 12px; font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px; margin-top: 10px; }
+  .score-evaluadores { font-size: 12px; opacity: 0.5; margin-top: 8px; }
+
+  .comp-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid var(--gray);
+  }
+  .comp-item:last-child { border-bottom: none; }
+  .comp-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .comp-dot.green { background: var(--green-light); }
+  .comp-dot.yellow { background: var(--yellow); }
+  .comp-dot.red { background: var(--red-light); }
+  .comp-name { flex: 1; font-weight: 700; font-size: 13px; }
+  .comp-status { font-size: 11px; color: var(--gray-dark); margin-top: 2px; }
+  .comp-score { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 20px; color: var(--text); }
+
+  .brecha-alert {
+    background: #FFF3E0;
+    border-left: 4px solid var(--yellow);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .brecha-alert .alert-icon { font-size: 20px; flex-shrink: 0; }
+  .brecha-alert .alert-title { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px; color: #E65100; }
+  .brecha-alert .alert-text { font-size: 12px; color: #BF360C; margin-top: 2px; }
+
+  /* PLAN SCREEN */
+  .plan-header {
+    background: linear-gradient(135deg, var(--blue) 0%, #0D47A1 100%);
+    border-radius: var(--radius); padding: 20px;
+    color: white; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .plan-header .ph-icon { font-size: 40px; }
+  .plan-header .ph-title { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 18px; }
+  .plan-header .ph-sub { font-size: 12px; opacity: 0.8; margin-top: 2px; }
+
+  .accion-card {
+    background: white; border-radius: var(--radius);
+    padding: 16px 18px; margin-bottom: 10px;
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--blue);
+  }
+  .accion-num { font-size: 11px; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .accion-title { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px; margin-bottom: 6px; }
+  .accion-desc { font-size: 12px; color: var(--gray-dark); line-height: 1.5; margin-bottom: 10px; }
+  .accion-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+  .meta-tag {
+    background: #EEF2FF; color: var(--blue);
+    border-radius: 6px; padding: 3px 8px;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  .check-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; cursor: pointer; }
+  .check-box {
+    width: 24px; height: 24px;
+    border: 2.5px solid var(--gray);
+    border-radius: 6px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; font-size: 14px;
+  }
+  .check-box.checked { background: var(--green-light); border-color: var(--green-light); }
+  .check-label { font-size: 13px; font-weight: 600; }
+  .check-label.checked { text-decoration: line-through; color: var(--gray-dark); }
+
+  /* SEGUIMIENTO SCREEN */
+  .seg-hero {
+    background: linear-gradient(135deg, var(--green) 0%, #1B5E20 100%);
+    border-radius: var(--radius); padding: 22px 20px;
+    color: white; margin-bottom: 14px;
+  }
+  .seg-hero .sh-label { font-size: 12px; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px; }
+  .seg-hero .sh-delta { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 36px; }
+  .seg-hero .sh-range { font-size: 13px; opacity: 0.7; }
+  .seg-stats { display: flex; gap: 10px; margin-top: 16px; }
+  .seg-stat { background: rgba(255,255,255,0.15); border-radius: 10px; padding: 10px 14px; flex: 1; text-align: center; }
+  .seg-stat .ss-val { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 22px; }
+  .seg-stat .ss-label { font-size: 11px; opacity: 0.75; margin-top: 2px; }
+
+  /* Mini chart */
+  .mini-chart { display: flex; align-items: flex-end; gap: 6px; height: 70px; padding: 0 4px; }
+  .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+  .bar { width: 100%; border-radius: 6px 6px 0 0; transition: height 0.8s cubic-bezier(0.4,0,0.2,1); }
+  .bar-month { font-size: 10px; color: var(--gray-dark); font-weight: 700; }
+
+  .timeline-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--gray); }
+  .timeline-item:last-child { border-bottom: none; }
+  .tl-dot-wrap { display: flex; flex-direction: column; align-items: center; }
+  .tl-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+  .tl-line { width: 2px; background: var(--gray); flex: 1; margin-top: 4px; }
+  .tl-title { font-weight: 700; font-size: 13px; }
+  .tl-date { font-size: 11px; color: var(--gray-dark); margin-top: 2px; }
+  .tl-badge { display: inline-block; border-radius: 6px; padding: 2px 8px; font-size: 11px; font-weight: 700; margin-top: 6px; }
+
+  .section-title {
+    font-family: 'Nunito', sans-serif; font-weight: 900;
+    font-size: 13px; color: var(--gray-dark);
+    text-transform: uppercase; letter-spacing: 0.8px;
+    margin: 4px 0 10px;
+  }
+
+  /* MODAL SUCCESS */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 200;
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: white; border-radius: 24px;
+    padding: 32px 24px; max-width: 320px; width: 90%;
+    text-align: center; animation: popIn 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+  }
+  @keyframes popIn { from { opacity:0; transform:scale(0.85); } to { opacity:1; transform:scale(1); } }
+  .modal-icon { font-size: 56px; margin-bottom: 12px; }
+  .modal-title { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 22px; margin-bottom: 8px; }
+  .modal-text { font-size: 14px; color: var(--gray-dark); line-height: 1.5; margin-bottom: 20px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="app-header">
+  <div>
+    <div class="logo-text">Lider<span>Emos</span> D1</div>
+    <div class="subtitle">Programa de Liderazgo Emocional</div>
+  </div>
+  <div class="header-icon">❤️</div>
+</div>
+
+<!-- SCREENS -->
+<div class="main">
+
+  <!-- INICIO -->
+  <div class="screen active" id="screen-inicio">
+    <div class="welcome-hero">
+      <div class="welcome-name">¡Hola, Carlos! 👋</div>
+      <div class="welcome-role">Jefe de Tienda · Zona Norte · Mes 2 de 4</div>
+      <div class="welcome-stats">
+        <div class="stat-pill">📊 3.6 / 5.0</div>
+        <div class="stat-pill">📈 +0.3 este mes</div>
+      </div>
+    </div>
+
+    <div class="section-title">Acciones rápidas</div>
+    <div class="quick-actions">
+      <button class="qa-btn red" onclick="goTo('evaluacion')">
+        <div class="qa-icon-bg"><span class="qa-icon">📋</span></div>
+        <div class="qa-label">Evaluación 360°</div>
+        <div class="qa-sub">Disponible ahora</div>
+      </button>
+      <button class="qa-btn blue" onclick="goTo('diagnostico')">
+        <div class="qa-icon-bg" style="background:#E3F2FD"><span class="qa-icon">🎯</span></div>
+        <div class="qa-label">Mi Diagnóstico</div>
+        <div class="qa-sub">Ver resultados</div>
+      </button>
+      <button class="qa-btn green" onclick="goTo('plan')">
+        <div class="qa-icon-bg" style="background:#E8F5E9"><span class="qa-icon">✅</span></div>
+        <div class="qa-label">Plan de Acción</div>
+        <div class="qa-sub">2 tareas pendientes</div>
+      </button>
+      <button class="qa-btn yellow" onclick="goTo('seguimiento')">
+        <div class="qa-icon-bg" style="background:#FFFDE7"><span class="qa-icon">📈</span></div>
+        <div class="qa-label">Mi Progreso</div>
+        <div class="qa-sub">Ver evolución</div>
+      </button>
+    </div>
+
+    <div class="section-title">Progreso del programa</div>
+    <div class="card">
+      <div class="prog-header">
+        <div>
+          <div style="font-size:12px;color:var(--gray-dark);font-weight:600;">Puntaje general</div>
+          <div class="prog-score">3.6 <span>/ 5.0</span></div>
+        </div>
+        <div class="prog-badge">▲ +0.3 vs mes anterior</div>
+      </div>
+      <div class="mini-bar">
+        <div class="mini-bar-label"><span>Comunicación efectiva</span><span style="color:var(--green);font-weight:800;">4.2</span></div>
+        <div class="mini-bar-track"><div class="mini-bar-fill" style="width:84%;background:var(--green-light)"></div></div>
+      </div>
+      <div class="mini-bar">
+        <div class="mini-bar-label"><span>Manejo del estrés</span><span style="color:var(--yellow);font-weight:800;">3.4</span></div>
+        <div class="mini-bar-track"><div class="mini-bar-fill" style="width:68%;background:var(--yellow)"></div></div>
+      </div>
+      <div class="mini-bar">
+        <div class="mini-bar-label"><span>Empatía y reconocimiento</span><span style="color:var(--red-light);font-weight:800;">2.5</span></div>
+        <div class="mini-bar-track"><div class="mini-bar-fill" style="width:50%;background:var(--red-light)"></div></div>
+      </div>
+      <div class="mini-bar">
+        <div class="mini-bar-label"><span>Retroalimentación</span><span style="color:var(--green);font-weight:800;">4.0</span></div>
+        <div class="mini-bar-track"><div class="mini-bar-fill" style="width:80%;background:var(--green-light)"></div></div>
+      </div>
+      <div class="mini-bar">
+        <div class="mini-bar-label"><span>Resolución de conflictos</span><span style="color:var(--yellow);font-weight:800;">3.7</span></div>
+        <div class="mini-bar-track"><div class="mini-bar-fill" style="width:74%;background:var(--yellow)"></div></div>
+      </div>
+    </div>
+
+    <div class="section-title">Cápsula de hoy</div>
+    <div class="card" style="display:flex;align-items:center;gap:14px;cursor:pointer;" onclick="alert('🎬 Reproduciendo: \"Escucha activa en 5 minutos\"')">
+      <div style="width:54px;height:54px;background:linear-gradient(135deg,var(--red),var(--red-dark));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;">▶️</div>
+      <div>
+        <div style="font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;">Escucha activa en 5 min</div>
+        <div style="font-size:12px;color:var(--gray-dark);margin-top:2px;">Semana 7 · Módulo Empatía</div>
+        <div style="font-size:11px;color:var(--red);font-weight:700;margin-top:4px;">⏱ 5 minutos · Quiz al final</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVALUACION -->
+  <div class="screen" id="screen-evaluacion">
+    <div style="font-family:'Nunito',sans-serif;font-weight:900;font-size:20px;margin-bottom:6px;">Evaluación 360°</div>
+    <div style="font-size:13px;color:var(--gray-dark);margin-bottom:14px;">Anónima · Mes 2 · Equipo evalúa al líder</div>
+
+    <div class="eval-progress" id="eval-dots"></div>
+
+    <div class="question-card" id="q-card">
+      <div class="q-category" id="q-cat"></div>
+      <div class="q-text" id="q-text"></div>
+      <div class="likert" id="likert-btns"></div>
+      <div class="likert-labels">
+        <span class="likert-label">Nunca</span>
+        <span class="likert-label">Siempre</span>
+      </div>
+    </div>
+
+    <div style="text-align:center;font-size:13px;color:var(--gray-dark);margin-bottom:12px;" id="q-counter"></div>
+    <button class="btn-primary" id="btn-next" onclick="nextQuestion()">Siguiente →</button>
+    <button class="btn-secondary" onclick="goTo('inicio')">← Volver al inicio</button>
+  </div>
+
+  <!-- DIAGNOSTICO -->
+  <div class="screen" id="screen-diagnostico">
+    <div class="score-hero">
+      <div class="month">Marzo 2026 · 18 evaluadores</div>
+      <div class="score-big">3.6 <span>/ 5.0</span></div>
+      <div><span class="score-delta">▲ +0.3 vs mes anterior</span></div>
+      <div class="score-evaluadores">60% equipo · 25% supervisor · 15% autoevaluación</div>
+    </div>
+
+    <div class="brecha-alert">
+      <div class="alert-icon">⚠️</div>
+      <div>
+        <div class="alert-title">2 brechas críticas identificadas</div>
+        <div class="alert-text">Empatía (2.5) y Manejo del estrés (3.4) requieren atención prioritaria este mes.</div>
+      </div>
+    </div>
+
+    <div class="section-title">Resultados por competencia</div>
+    <div class="card">
+      <div class="comp-item">
+        <div class="comp-dot green"></div>
+        <div style="flex:1">
+          <div class="comp-name">Comunicación efectiva</div>
+          <div class="comp-status">🟢 Adecuado · Mantener</div>
+        </div>
+        <div class="comp-score" style="color:var(--green)">4.2</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-dot yellow"></div>
+        <div style="flex:1">
+          <div class="comp-name">Manejo del estrés</div>
+          <div class="comp-status">🟡 Alerta · Requiere atención</div>
+        </div>
+        <div class="comp-score" style="color:var(--yellow)">3.4</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-dot red"></div>
+        <div style="flex:1">
+          <div class="comp-name">Empatía y reconocimiento</div>
+          <div class="comp-status">🔴 Crítico · Brecha prioritaria</div>
+        </div>
+        <div class="comp-score" style="color:var(--red)">2.5</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-dot green"></div>
+        <div style="flex:1">
+          <div class="comp-name">Retroalimentación</div>
+          <div class="comp-status">🟢 Adecuado · Mantener</div>
+        </div>
+        <div class="comp-score" style="color:var(--green)">4.0</div>
+      </div>
+      <div class="comp-item">
+        <div class="comp-dot yellow"></div>
+        <div style="flex:1">
+          <div class="comp-name">Resolución de conflictos</div>
+          <div class="comp-status">🟡 Alerta · Requiere atención</div>
+        </div>
+        <div class="comp-score" style="color:var(--yellow)">3.7</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="goTo('plan')">Ver mi Plan de Acción →</button>
+  </div>
+
+  <!-- PLAN -->
+  <div class="screen" id="screen-plan">
+    <div class="plan-header">
+      <div class="ph-icon">🎯</div>
+      <div>
+        <div class="ph-title">Plan de Acción</div>
+        <div class="ph-sub">Generado automáticamente · Mes 3</div>
+        <div class="ph-sub">Brecha prioritaria: Empatía y reconocimiento</div>
+      </div>
+    </div>
+
+    <div class="section-title">Acciones del mes</div>
+
+    <div class="accion-card">
+      <div class="accion-num">Acción 1 · Empatía</div>
+      <div class="accion-title">🤝 Reuniones de reconocimiento</div>
+      <div class="accion-desc">Implementar reuniones cortas semanales de 10 min para reconocer un logro del equipo y preguntar por su bienestar.</div>
+      <div class="accion-meta">
+        <span class="meta-tag">📅 Plazo: 4 semanas</span>
+        <span class="meta-tag">📊 Meta: 4 reuniones</span>
+      </div>
+    </div>
+
+    <div class="accion-card">
+      <div class="accion-num">Acción 2 · Empatía</div>
+      <div class="accion-title">📱 Cápsula de microlearning</div>
+      <div class="accion-desc">Completar el módulo "Empatía en la operación diaria" (3 cápsulas + quiz mayor a 80%).</div>
+      <div class="accion-meta">
+        <span class="meta-tag">📅 Plazo: 2 semanas</span>
+        <span class="meta-tag">🎯 Quiz ≥ 80%</span>
+      </div>
+    </div>
+
+    <div class="accion-card">
+      <div class="accion-num">Acción 3 · Seguimiento</div>
+      <div class="accion-title">👥 Sesión de coaching grupal</div>
+      <div class="accion-desc">Asistir a la sesión virtual mensual con el coach certificado y grupo de 6-8 jefes de zona.</div>
+      <div class="accion-meta">
+        <span class="meta-tag">📅 15 de abril</span>
+        <span class="meta-tag">⏱ 1 hora</span>
+      </div>
+    </div>
+
+    <div class="section-title">Mi checklist del mes</div>
+    <div class="card">
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-label checked">Reunión de reconocimiento semana 1</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box">✓</div>
+        <div class="check-label checked">Cápsula 1: Escucha activa</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box checked">✓</div>
+        <div class="check-label checked">Cápsula 2: Lenguaje empático</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-label">Reunión de reconocimiento semana 2</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-label">Cápsula 3: Reconocimiento en equipo</div>
+      </div>
+      <div class="check-row" onclick="toggleCheck(this)">
+        <div class="check-box"></div>
+        <div class="check-label">Sesión coaching grupal (15 abr)</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="goTo('seguimiento')">Ver mi progreso →</button>
+  </div>
+
+  <!-- SEGUIMIENTO -->
+  <div class="screen" id="screen-seguimiento">
+    <div class="seg-hero">
+      <div class="sh-label">Progreso general · 4 meses</div>
+      <div class="sh-delta">+0.9 puntos</div>
+      <div class="sh-range">de 3.0 a 3.9 en el programa</div>
+      <div class="seg-stats">
+        <div class="seg-stat">
+          <div class="ss-val">88%</div>
+          <div class="ss-label">Cápsulas completadas</div>
+        </div>
+        <div class="seg-stat">
+          <div class="ss-val">10/12</div>
+          <div class="ss-label">Planes ejecutados</div>
+        </div>
+        <div class="seg-stat">
+          <div class="ss-val">4/4</div>
+          <div class="ss-label">Evaluaciones 360°</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Evolución mensual</div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:700;">Puntaje promedio por mes</div>
+        <div style="font-size:12px;color:var(--green);font-weight:800;">+0.9 total ▲</div>
+      </div>
+      <div class="mini-chart" id="mini-chart"></div>
+    </div>
+
+    <div class="section-title">Historial de evaluaciones</div>
+    <div class="card">
+      <div class="timeline-item">
+        <div class="tl-dot-wrap">
+          <div class="tl-dot" style="background:var(--green-light)"></div>
+          <div class="tl-line"></div>
+        </div>
+        <div>
+          <div class="tl-title">Evaluación 360° · Mes 4</div>
+          <div class="tl-date">Marzo 2026 · 18 evaluadores</div>
+          <div><span class="tl-badge" style="background:#E8F5E9;color:var(--green)">3.9 / 5.0 · +0.3</span></div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot-wrap">
+          <div class="tl-dot" style="background:var(--yellow)"></div>
+          <div class="tl-line"></div>
+        </div>
+        <div>
+          <div class="tl-title">Evaluación 360° · Mes 3</div>
+          <div class="tl-date">Febrero 2026 · 16 evaluadores</div>
+          <div><span class="tl-badge" style="background:#FFF9C4;color:#F57F17">3.6 / 5.0 · +0.3</span></div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot-wrap">
+          <div class="tl-dot" style="background:var(--yellow)"></div>
+          <div class="tl-line"></div>
+        </div>
+        <div>
+          <div class="tl-title">Evaluación 360° · Mes 2</div>
+          <div class="tl-date">Enero 2026 · 15 evaluadores</div>
+          <div><span class="tl-badge" style="background:#FFF9C4;color:#F57F17">3.3 / 5.0 · +0.3</span></div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="tl-dot-wrap">
+          <div class="tl-dot" style="background:var(--red-light)"></div>
+        </div>
+        <div>
+          <div class="tl-title">Diagnóstico inicial · Mes 1</div>
+          <div class="tl-date">Diciembre 2025 · Línea base</div>
+          <div><span class="tl-badge" style="background:#FFEBEE;color:var(--red)">3.0 / 5.0 · Inicio</span></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-primary" style="background:var(--green);box-shadow:0 4px 16px rgba(46,125,50,0.35);" onclick="document.getElementById('modal-cert').classList.add('show')">
+      🏆 Descargar certificado
+    </button>
+  </div>
+
+</div><!-- /main -->
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="nav-item active" id="nav-inicio" onclick="goTo('inicio')">
+    <span class="nav-icon">🏠</span>Inicio
+  </button>
+  <button class="nav-item" id="nav-evaluacion" onclick="goTo('evaluacion')">
+    <span class="nav-icon">📋</span>Evaluar
+  </button>
+  <button class="nav-item" id="nav-diagnostico" onclick="goTo('diagnostico')">
+    <span class="nav-icon">🎯</span>Diagnóstico
+  </button>
+  <button class="nav-item" id="nav-plan" onclick="goTo('plan')">
+    <span class="nav-icon">✅</span>Plan
+  </button>
+  <button class="nav-item" id="nav-seguimiento" onclick="goTo('seguimiento')">
+    <span class="nav-icon">📈</span>Progreso
+  </button>
+</nav>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-eval" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal">
+    <div class="modal-icon">🎉</div>
+    <div class="modal-title">¡Evaluación completada!</div>
+    <div class="modal-text">Gracias por tu aporte. Tu evaluación anónima ayuda a mejorar el liderazgo en tienda. Los resultados estarán disponibles en 48 horas.</div>
+    <button class="btn-primary" onclick="document.getElementById('modal-eval').classList.remove('show');goTo('diagnostico')">Ver diagnóstico →</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-cert" onclick="if(event.target===this)this.classList.remove('show')">
+  <div class="modal">
+    <div class="modal-icon">🏅</div>
+    <div class="modal-title">¡Felicitaciones, Carlos!</div>
+    <div class="modal-text">Completaste el programa LiderEmos D1 con un puntaje final de 3.9/5.0 y una mejora de +0.9 puntos. ¡Tu equipo lo reconoce!</div>
+    <button class="btn-primary" style="background:var(--green);box-shadow:0 4px 16px rgba(46,125,50,0.35);" onclick="document.getElementById('modal-cert').classList.remove('show')">¡Excelente! 🎊</button>
+  </div>
+</div>
+
+<script>
+// NAVIGATION
+function goTo(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('screen-' + screen).classList.add('active');
+  document.getElementById('nav-' + screen).classList.add('active');
+  window.scrollTo(0, 0);
+  if (screen === 'evaluacion') initEval();
+  if (screen === 'seguimiento') initChart();
+}
+
+// CHECKLIST
+function toggleCheck(row) {
+  const box = row.querySelector('.check-box');
+  const label = row.querySelector('.check-label');
+  const isChecked = box.classList.contains('checked');
+  box.classList.toggle('checked', !isChecked);
+  label.classList.toggle('checked', !isChecked);
+  box.textContent = isChecked ? '' : '✓';
+}
+// init checked boxes
+document.querySelectorAll('.check-box.checked').forEach(b => b.textContent = '✓');
+
+// EVALUACION
+const questions = [
+  { cat: 'Comunicación efectiva', text: '¿Tu líder explica con claridad las metas y tareas del equipo?' },
+  { cat: 'Comunicación efectiva', text: '¿Tu líder escucha activamente cuando le hablas?' },
+  { cat: 'Manejo del estrés', text: '¿Tu líder mantiene la calma en momentos de alta presión operativa?' },
+  { cat: 'Empatía y reconocimiento', text: '¿Tu líder reconoce los logros del equipo y se interesa por su bienestar?' },
+  { cat: 'Retroalimentación constructiva', text: '¿Tu líder brinda retroalimentación oportuna y respetuosa?' },
+  { cat: 'Resolución de conflictos', text: '¿Tu líder aborda los desacuerdos con justicia y equidad?' },
+];
+let currentQ = 0;
+let answers = new Array(questions.length).fill(0);
+
+function initEval() {
+  currentQ = 0;
+  answers = new Array(questions.length).fill(0);
+  renderDots();
+  renderQuestion();
+}
+
+function renderDots() {
+  const dots = document.getElementById('eval-dots');
+  dots.innerHTML = questions.map((_, i) => {
+    let cls = i < currentQ ? 'done' : i === currentQ ? 'active' : '';
+    return `<div class="eval-dot ${cls}"></div>`;
+  }).join('');
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('q-cat').textContent = q.cat;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('q-counter').textContent = `Pregunta ${currentQ + 1} de ${questions.length}`;
+  const btns = document.getElementById('likert-btns');
+  btns.innerHTML = [1,2,3,4,5].map(n =>
+    `<button class="likert-btn ${answers[currentQ]===n?'selected':''}" onclick="selectAnswer(${n})">${n}</button>`
+  ).join('');
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.textContent = currentQ === questions.length - 1 ? 'Enviar evaluación ✓' : 'Siguiente →';
+}
+
+function selectAnswer(n) {
+  answers[currentQ] = n;
+  document.querySelectorAll('.likert-btn').forEach((b, i) => {
+    b.classList.toggle('selected', i === n - 1);
+  });
+}
+
+function nextQuestion() {
+  if (answers[currentQ] === 0) {
+    document.getElementById('q-card').style.boxShadow = '0 0 0 3px var(--red-light)';
+    setTimeout(() => document.getElementById('q-card').style.boxShadow = 'var(--shadow)', 600);
+    return;
+  }
+  if (currentQ < questions.length - 1) {
+    currentQ++;
+    renderDots();
+    renderQuestion();
+  } else {
+    document.getElementById('modal-eval').classList.add('show');
+  }
+}
+
+// CHART
+function initChart() {
+  const data = [
+    { month: 'Mes 1', score: 3.0, color: '#EF9A9A' },
+    { month: 'Mes 2', score: 3.3, color: '#FFD54F' },
+    { month: 'Mes 3', score: 3.6, color: '#FFD54F' },
+    { month: 'Mes 4', score: 3.9, color: '#66BB6A' },
+  ];
+  const max = 5;
+  const chart = document.getElementById('mini-chart');
+  chart.innerHTML = data.map(d => {
+    const pct = (d.score / max) * 100;
+    return `<div class="bar-wrap">
+      <div style="font-size:11px;color:var(--text);font-weight:800;margin-bottom:2px;">${d.score}</div>
+      <div class="bar" style="height:${pct}%;background:${d.color};min-height:8px;"></div>
+      <div class="bar-month">${d.month}</div>
+    </div>`;
+  }).join('');
+}
+</script>
+</body>
+</html>
